@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/img/favicon.png" rel="SHORTCUT ICON">
+    <title>产经新闻大脑</title>
+
+    <!-- Bootstrap JQuery依赖 -->
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+
+    <script src="/static/js/jquery-3.5.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- MD5依赖 -->
+    <script src="/static/js/md5.js"></script>
+
+    <link rel="stylesheet" href="/static/css/navigator.css"/>
+    <link rel="stylesheet" href="/static/css/popovers.css"/>
+    <link rel="stylesheet" href="/static/css/message-list.css"/>
+    <script src="/static/js/userAuth.js"></script>
+    <script src="/static/js/accessory.js"></script>
+    <script src="/static/js/accessory-adjust.js"></script>
+
+    <script type="text/javascript">
+    function delete_report(table_name)//防止使用标签在定义之前
+    {
+        var r=confirm("确定删除？");
+        if (r==false){
+            return;
+        }
+        var id = table_name + "_delete_box";
+    	var bton = document.getElementById(id).innerHTML;
+    	if(bton === "已删除"){
+    		document.getElementById(id).innerHTML="删除周报";
+    	}
+    	if(bton === "删除周报"){
+    		document.getElementById(id).innerHTML="已删除";
+    	}
+    	var input = {
+            "table_name": table_name,
+            "bton": bton
+        };
+    	$.ajax({
+            url: '/delete_report',
+            type: 'post',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(input),
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    </script>
+</head>
+
+<body>
+{% include 'navigator.html' %}
+<div class="container" style="border: 0px solid red">
+    <div class="text-left">
+        <a href="/create_weekly_report" class="btn btn-primary btn-info text-center">
+            创建周报
+        </a>
+    </div>
+    <div id='mainContent' class="row" style="border: 0px solid blue">
+        <div class="row col-12" style="margin-bottom: 100px;">
+            <div class="col-12 section">
+                <div class="d-flex col-12 justify-content-center">
+                    <div class="btn btn-light p-3 section-title">
+                        <span>周报列表</span>
+                        <span class="badge badge-primary" style="min-width: 78px;">{{ len }}</span>
+                    </div>
+                </div>
+<!--                <form action="/create_weekly_report" method="post">-->
+<!--                    <input type="submit" name="current_time" value="创建周报">-->
+<!--                </form>-->
+                {% for report in weekly_report %}
+                <div class="row msg-list">
+<!--                    <div class="col-1" style="padding: 0;">-->
+<!--                        <img class="rounded-circle avatar" src=""/>-->
+<!--                    </div>-->
+                    <div class="col-11 detail">
+                        <div class="title">
+                            <a class="headline" href="/edit_weekly_report/{{ report.title }}">{{ report.weekly_report_name }}</a>
+                            <button class="btn btn-outline-danger mr-3"
+                                    id= "{{ report.title }}_delete_box"
+                                    onclick="delete_report('{{ report.title }}')">删除周报</button>
+                        </div>
+                        <div class="info">
+                            作者: {{ report.principal }}&nbsp;&nbsp;&nbsp;
+                            日期: {{ report.create_time }}&nbsp;&nbsp;&nbsp;
+                            初选数量: {{ report.news_count }}&nbsp;&nbsp;&nbsp;
+                            发布数量: {{ report.weekly_report_count }}&nbsp;&nbsp;&nbsp;
+                            状态: {{ report.is_publish }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+</body>
+
+<script>
+    function get_time(){
+        var date = new Date();
+        var strDate = date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+':'+date.getMilliseconds();
+        document.getElementById("time").innerHTML = strDate;
+    }
+</script>
+</html>

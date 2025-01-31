@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/img/favicon.png" rel="SHORTCUT ICON">
+    <title>产经新闻大脑</title>
+
+    <!-- Bootstrap JQuery依赖 -->
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
+
+    <script src="/static/js/jquery-3.5.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- MD5依赖 -->
+    <script src="/static/js/md5.js"></script>
+
+    <link rel="stylesheet" href="/static/css/navigator.css"/>
+    <link rel="stylesheet" href="/static/css/popovers.css"/>
+    <link rel="stylesheet" href="/static/css/message-list.css"/>
+    <script src="/static/js/userAuth.js"></script>
+    <script src="/static/js/accessory.js"></script>
+    <script src="/static/js/accessory-adjust.js"></script>
+
+    <script type="text/javascript">
+
+    function filter(news_id, table_name)//防止使用标签在定义之前
+    {
+        var id = news_id + "_first_filter_box";
+    	var bton = document.getElementById(id).innerHTML;
+    	if(bton === "初选"){
+    		document.getElementById(id).innerHTML="取消初选";
+    	}
+    	if(bton === "取消初选"){
+    		document.getElementById(id).innerHTML="初选";
+    	}
+    	var input = {
+            "news_id": news_id,
+            "table_name": table_name,
+            "bton": bton
+        };
+    	$.ajax({
+            url: '/choose_news',
+            type: 'post',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(input),
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function search_by_key(query){
+    // 根据id获得input内的值
+    var key = query.key + ' ' + document.getElementById("keywordText").value;
+    var bad_key = document.getElementById("badWordText").value;
+    const data = {
+            start_time: query.start_time,
+            end_time: query.end_time,
+            table_name: query.table_name,
+            key: key,
+            bad_key: query.bad_key,
+            curr_page: 1
+        };
+
+        var temp_form = document.createElement("form");
+        temp_form.action = '/search_url';
+        temp_form.method = "post";
+        temp_form.style.display="none"
+
+        for (var x in data) {
+            var opt = document.createElement("input");
+            opt.name = x;
+            opt.value = data[x];
+            temp_form.appendChild(opt);
+        }
+
+        var opt = document.createElement("input");
+        opt.type = "submit";
+        temp_form.appendChild(opt);
+        document.body.appendChild(temp_form);
+        temp_form.submit();
+        document.body.removeChild(temp_form);
+    }
+
+    function search_by_bad_key(query){
+    // 根据id获得input内的值
+    var bad_key = query.bad_key + ' ' + document.getElementById("badWordText").value;
+    const data = {
+            start_time: query.start_time,
+            end_time: query.end_time,
+            table_name: query.table_name,
+            key: query.key,
+            bad_key: bad_key,
+            curr_page: 1
+        };
+
+        var temp_form = document.createElement("form");
+        temp_form.action = '/search_url';
+        temp_form.method = "post";
+        temp_form.style.display="none"
+
+        for (var x in data) {
+            var opt = document.createElement("input");
+            opt.name = x;
+            opt.value = data[x];
+            temp_form.appendChild(opt);
+        }
+
+        var opt = document.createElement("input");
+        opt.type = "submit";
+        temp_form.appendChild(opt);
+        document.body.appendChild(temp_form);
+        temp_form.submit();
+        document.body.removeChild(temp_form);
+    }
+
+    function sendData(query, curr_page) {
+        const data = {
+            start_time: query.start_time,
+            end_time: query.end_time,
+            table_name: query.table_name,
+            key: query.key,
+            bad_key: query.bad_key,
+            curr_page: curr_page
+        };
+
+        var temp_form = document.createElement("form");
+        temp_form.action = '/search_url';
+        temp_form.method = "post";
+        temp_form.style.display="none"
+
+        for (var x in data) {
+            var opt = document.createElement("input");
+            opt.name = x;
+            opt.value = data[x];
+            temp_form.appendChild(opt);
+        }
+
+        var opt = document.createElement("input");
+        opt.type = "submit";
+        temp_form.appendChild(opt);
+        document.body.appendChild(temp_form);
+        temp_form.submit();
+        document.body.removeChild(temp_form);
+    }
+
+    function jumpToPage(query) {
+        var pageInput = document.querySelector('input[type="number"]');
+        var pageNum = parseInt(pageInput.value);
+
+        if (pageNum >= 1 && pageNum <= query.page_count) {
+            query.curr_page = pageNum;
+            sendData(query, pageNum);
+        }
+    }
+
+    function showSearchBar() {
+        var searchBar = document.getElementById("searchBar");
+        if (searchBar.style.display === "none") {
+            searchBar.style.display = "block";
+        }
+        else if (searchBar.style.display === "block") {
+            searchBar.style.display = "none";
+        }
+    }
+
+    </script>
+</head>
+
+<body>
+{% include 'navigator.html' %}
+<div class="container" style="border: 0px solid red">
+    <div id='mainContent' class="row" style="border: 0px solid blue">
+        <ul class="row col-12 nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item custom-tab" role="presentation">
+                <a class="nav-link custom-tab-link active" style="padding: 8px 50px;" href="/filter_weekly_report/{{ query.table_name }}">
+                    新闻初筛
+                </a>
+            </li>
+            <li class="nav-item custom-tab" role="presentation">
+                <a class="nav-link custom-tab-link" style="padding: 8px 50px;" href="/edit_weekly_report/{{ query.table_name }}">
+                    编辑周报
+                </a>
+            </li>
+            <li class="nav-item custom-tab" role="presentation">
+                <a class="nav-link custom-tab-link" style="padding: 8px 50px;" href="/show_report/{{ query.table_name }}">
+                    周报预览
+                </a>
+            </li>
+        </ul>
+        <div class="row col-10 " style="margin-bottom: 600px;">
+            <div class="text-right" style="margin-top: 10px;">
+                <label style="font-weight: bolder;">{{ query.report_name }}</label>
+                <label>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;创建人：{{ query.report_auth }}&nbsp;&nbsp;|&nbsp;&nbsp;</label>
+                <label> 创建时间：{{ query.report_time }}</label>
+                <button onclick="showSearchBar()" class="btn btn-primary btn-info" style="margin-left: 40px;">展开搜索栏</button>
+            </div>
+            <div id="searchBar" class="container mt-4 search" style="display: none;">
+                <form action="/search_url" method="post">
+                    <div class="form-group row justify-content-end">
+                        <div class="col-sm-6">
+                            <label for="start_time" class="col-form-label">起始时间:&nbsp;&nbsp;&nbsp;{{query.start_time}}</label>
+                            <input type="date" class="form-control" id="start_time" name="start_time" placeholder="请输入开始时间">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="end_time" class="col-form-label">结束时间:&nbsp;&nbsp;&nbsp;{{query.end_time}}</label>
+                            <input type="submit" class="btn btn-primary btn-sm float-right" value="筛选">
+                            <input type="date" class="form-control" id="end_time" name="end_time" placeholder="请输入结束时间">
+                        </div>
+                    </div>
+                    <input type="hidden" name="table_name" value="{{ query.table_name }}">
+                    <input type="hidden" name="curr_page" value=1>
+                </form>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">
+                            搜索关键词：&nbsp;&nbsp;&nbsp;{{ query.key }}
+                        </label>
+                        <div class="input-group mb-3">
+                            <input id="keywordText" type="text" class="form-control" placeholder="请输入搜索关键字，以空格分隔">
+                            <div class="input-group-append">
+                                <button onclick="search_by_key({{ query }})" type="button" class="btn btn-outline-success" style="padding: 0 50px;">搜 索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="col-form-label">
+                            过滤关键词：&nbsp;&nbsp;&nbsp;{{ query.bad_key }}
+                        </div>
+                        <div class="input-group mb-3">
+                            <input id="badWordText" type="text" class="form-control" placeholder="请输入过滤关键字，以空格分隔">
+                            <div class="input-group-append">
+                                <button onclick="search_by_bad_key({{ query }})" type="button" class="btn btn-outline-danger" style="padding: 0 50px;">过 滤</button>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-12 section">
+                {% if news_link %}
+                <div class="d-flex col-12 justify-content-center">
+                    <div class="btn btn-light p-3 section-title">
+                        <span>新闻数据</span>
+                        <span class="badge badge-primary" style="min-width: 78px;">{{ query.length }}</span>
+                    </div>
+                </div>
+                {% for news in news_link %}
+                <div class="row msg-list">
+                    <div class="col-13 detail">
+                        <div class="title">
+                            <a class="headline" href='{{ news["url"] }}' target="_blank">{{ news["title"] }}</a>
+                            <button class="btn btn-success mr-3"
+                                    id= "{{ news['id'] }}_first_filter_box"
+                                    onclick="filter('{{ news['id'] }}', '{{ query.table_name }}')">初选</button>
+                        </div>
+                        <div class="info">
+                            时间: {{ news["time"] }}&nbsp;&nbsp;&nbsp;
+                            来源: {{ news["source"] }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="d-flex col-14 justify-content-center">
+                    <div class="btn btn-light p-3 section-title">
+                        <span>周报草稿创建成功，请选择新闻日期</span>
+                        <span class="badge badge-primary" style="min-width: 78px;"></span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <!-- pagination -->
+            <div class="section col-12">
+                <div class="d-flex col-12 justify-content-center">
+                    <span class="justify-content-center" style="margin-top: 25px;">第 {{ query.curr_page}} 页</span>
+                    <nav class="page-num justify-content-center">
+                        <ul class="pagination" style="margin: 0;">
+                            <li class="page-item {% if query.curr_page <= 1 %}disabled{% endif %}">
+                                <button class="page-link" onclick="sendData({{ query }}, '{{ query.curr_page - 1 }}')">
+                                    <span>&laquo;</span>
+                                </button>
+                            </li>
+
+                            <!-- 超出12页将隐藏中间页码 -->
+                            {% if query.page_count > 12 %}
+                            {% for i in range(6) %}
+                            <li class="page-item">
+                                <button class="page-link" onclick="sendData({{ query }}, '{{ i+1 }}')">{{i + 1}}</button>
+                            </li>
+                            {% endfor %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                            {% if query.curr_page > 6 and query.curr_page <= query.page_count - 6 %}
+                            <li class="page-item disabled">
+                                <button class="page-link" onclick="sendData({{ query }}, '{{ query.curr_page }}')">{{query.curr_page}}</button>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                            {% endif %}
+                            {% for i in range(query.page_count - 6, query.page_count) %}
+                            <li class="page-item">
+                                <button class="page-link" onclick="sendData({{ query }}, '{{ i+1 }}')">{{i + 1}}</button>
+                            </li>
+                            {% endfor %}
+
+                            {% else %}
+
+                            {% for i in range(query.page_count) %}
+                            <li class="page-item">
+                                <button class="page-link" onclick="sendData({{ query }}, '{{ i+1 }}')">{{i + 1}}</button>
+                            </li>
+                            {% endfor %}
+                            {% endif %}
+
+                            <li class="page-item {% if query.curr_page > query.page_count - 1 %}disabled{% endif %}">
+                                <button class="page-link" onclick="sendData({{ query }}, '{{ query.curr_page + 1 }}')">
+                                    <span>&raquo;</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="d-flex col-12 justify-content-center">
+                    <form onsubmit="jumpToPage({{ query }}); return false;" class="form-inline">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="inputPage" class="sr-only">跳转到第几页</label>
+                            <input type="number" class="form-control" id="inputPage" placeholder="跳转到第几页" onkeydown="if(event.keyCode==13) document.getElementById('btnJump').click()">
+                        </div>
+                        <button id="btnJump" type="button" class="btn btn-primary mb-2" onclick="jumpToPage({{ query }})">跳转</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-2" style="padding-left: 15px; border: 0px solid black">
+            <div class="col-12 list-group" id="sidebar" style="padding: 0; margin-top: 15px;">
+                <span href="#" class="list-group-item list-group-item-action active text-center">
+                    已选数量
+                </span>
+                <span class="list-group-item list-group-item-action text-center" style="  font-size: 20px; font-weight: bold;">
+                    {{ query.caught_num }}
+                </span>
+                <a href="#" class="list-group-item list-group-item-action active text-center"
+                   onclick="scrollToTop()">
+                    <svg class="bi bi-arrow-up-left-circle-fill text-light" width="1em" height="1em"
+                         viewBox="0 0 16 16"
+                         fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+                         style="margin-bottom: 3px; margin-left: -3px;">
+                        <path fill-rule="evenodd"
+                              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM9.5 5h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V6.707l4.146 4.147a.5.5 0 0 0 .708-.708L6.707 6H9.5a.5.5 0 0 0 0-1z"/>
+                    </svg>
+                    回到顶部
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+</body>
+</html>

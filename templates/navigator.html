@@ -1,0 +1,143 @@
+<!-- for Jinja2 inclusion -->
+<!-- navigator -->
+<script type="text/javascript">
+function updateData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/start_scrapy', true);
+    xhr.send();
+}
+var source = new EventSource('/stream');
+source.addEventListener('progress', function(event) {
+    var data = JSON.parse(event.data);
+    var progress = data.progress;
+    $('#progressBar').css('width', progress + '%').attr('aria-valuenow', progress);
+    if (progress >= 100) {
+        $('#staticUpdate').modal('hide');
+        alert('数据已经更新完成！');
+        progress = 0
+    }
+}, false);
+</script>
+
+<div class="menu bg-light shadow">
+    <div class="container" style="padding: 0;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-size: 16px">
+            <a class="navbar-brand brand" href="/">产经新闻大脑</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="modal" data-target="#staticUpdate">更新数据库</a>
+                    </li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            更多
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="https://github.com/garbonreal/LearnFlask/issues/new"
+                               target="_blank">反馈</a>
+                            <a class="dropdown-item" target="_blank"
+                               href="https://github.com/garbonreal/LearnFlask">访问Github</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/about">关于</a>
+                        </div>
+                    </li>
+                </ul>
+                {% if session.get('isLogin') == 'true' %}
+                <div id="loginCenter">
+                    <a href="#"><img class="rounded-circle avatar" src="/static/img/{{session.get('avatar')}}"/></a>
+                    <div class="userControl" style="display: none">
+                        <a class="dropdown-item" href="/profile">个人中心</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:doLogout();">注销</a>
+                    </div>
+                </div>
+                {% else %}
+                <button class="btn btn-outline-success mr-3" data-toggle="modal"
+                        data-target="#staticBackdrop">登录
+                </button>
+                <button class="btn btn-outline-dark" onclick="doRegister();">注册</button>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</div>
+
+<!-- new data model -->
+<div class="modal fade" id="staticUpdate" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="staticUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticUpdateLabel">更新数据</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="inputData">数据</label>
+                    <textarea class="form-control" id="inputData" rows="10" style="white-space: pre-wrap; text-align:left;">
+默认情况下，爬虫程序每天凌晨00:00自动更新数据库数据；
+如果您决定立即更新数据，请点击下方按钮。
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="progressBar">进度</label>
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" onclick="updateData();">立即更新数据</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Login Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">登录</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/login">
+                    <div class="form-group">
+                        <label for="inputAccount">用户名</label>
+                        <input type="text" class="form-control" id="inputAccount" aria-describedby="emailHelp"
+                               placeholder="用户名或电子邮件">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">密码</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="请输入密码">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label" for="remember">记住我</label>
+                        <a href="#" style="float: right; padding-right: 10px">忘记密码?</a>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="loginBtn" class="btn btn-outline-success">登录</button>
+                <button type="button" class="btn btn-outline-dark" onclick="doRegister();">注册</button>
+            </div>
+        </div>
+    </div>
+</div>
