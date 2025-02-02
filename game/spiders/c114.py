@@ -82,7 +82,7 @@ class C114Spider(scrapy.Spider):
         page = response.meta['page'] + 1
         news_list = response.xpath('//div[@class="new_list_c"]')
         for news in news_list:
-            # 提取新闻标题和链接
+            # 提取News Title和链接
             news_title = news.xpath('./h6/a/text()').get()
             news_link = news.xpath('./h6/a/@href').get()
             # 提取新闻时间

@@ -2,7 +2,7 @@ import re
 
 from flask import session
 
-type_map = ['科创前沿', '政策速览', '产业要报', '企业动态', '区域亮点']
+type_map = ['Science and innovation Frontier ',' Policy Overview ', 'Industry report ',' Enterprise Dynamics ', 'Regional Highlights']
 
 source_num = 31
 temp_num = 0

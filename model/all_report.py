@@ -5,44 +5,44 @@ import datetime
 class AllReport(db.Model):
     __tablename__ = 'all_report'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # 表格名
+    # table name
     title = db.Column(db.String(100), nullable=False)
-    # 创建时间
+    # creation time
     create_time = db.Column(db.DateTime, nullable=False)
-    # 负责人
+    # person in charge
     principal = db.Column(db.String(20), nullable=False)
-    # 进入初选的新闻个数
+    # number of news articles entering first select
     news_count = db.Column(db.Integer, nullable=False)
-    # 进入周报的新闻个数
+    # number of news articles entering the weekly report
     weekly_report_count = db.Column(db.Integer, nullable=False)
-    # 是否发布 两种状态：已发布、未发布
+    # publication status: "published" or "unpublished"
     is_publish = db.Column(db.String(20), nullable=False)
-    # 是否编辑过总结 两种状态：已编辑、未编辑
+    # summary edit status: "edited" or "unedited"
     is_edit = db.Column(db.String(20), nullable=False)
-    # 总结标题
+    # summary title
     content_title = db.Column(db.String(100))
-    # 总结内容
+    # summary content
     content = db.Column(db.Text)
-    # 周报名称
+    # weekly report name
     weekly_report_name = db.Column(db.String(100))
-    # 搜索开始时间
+    # search start time
     start_time = db.Column(db.DateTime)
-    # 搜索结束时间
+    # search end time
     end_time = db.Column(db.DateTime)
-    # 搜索关键词
+    # search keywords
     search_key = db.Column(db.String(100))
-    # 过滤关键词
+    # filter keywords
     filter_key = db.Column(db.String(100))
-    # 当前页数
+    # current page number
     curr_page = db.Column(db.Integer)
-    # 总页数
+    # total number of pages
     page_count = db.Column(db.Integer)
-    # 新闻总条数
+    # total number of news articles
     length = db.Column(db.Integer)
-    # 已初选新闻条数
+    # number of news articles that passed first select
     first_filter_length = db.Column(db.Integer)
 
-    # 编辑周报评论
+    # edit comment
     @staticmethod
     def edit_comment(table_name, headline, content):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()
@@ -50,13 +50,13 @@ class AllReport(db.Model):
         all_report.content = content
         db.session.commit()
 
-    # 获取周报数据搜索状态
+    # get the search status of weekly report data
     @staticmethod
     def get_search_state(table_name):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()
         return all_report
 
-    # 更新周报数据搜索状态
+    # update the status of weekly report data search
     @staticmethod
     def update_search_state(table_name, start_time, end_time, search_key, filter_key, curr_page, page_count, length):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()
@@ -69,7 +69,7 @@ class AllReport(db.Model):
         all_report.length = length
         db.session.commit()
 
-    # 获得表名
+    # get table name
     @staticmethod
     def get_table_name(table_name):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()
@@ -90,13 +90,13 @@ class AllReport(db.Model):
         table_time = title.replace('weekly_report_', '').replace('_'+auth, '')
         time = datetime.datetime.strptime(table_time, "%Y%m%d-%H%M%S")
         all_report = AllReport(title=title, create_time=time, principal=auth, news_count=0,
-                               weekly_report_count=0, is_publish='未发布', is_edit='未编辑',
-                               weekly_report_name='数字经济与科技创新动态（未编辑）')
+                               weekly_report_count=0, is_publish='unpublished', is_edit='unedited',
+                               weekly_report_name='Weekly report (unedited)')
         db.session.add(all_report)
         db.session.commit()
-        return "新周报草稿创建成功"
+        return "New weekly report draft created successfully"
 
-    # 改变周报名称
+    # Change the name of the weekly report
     @staticmethod
     def change_weekly_report_name(table_name, weekly_report_name):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()
@@ -115,14 +115,14 @@ class AllReport(db.Model):
         db.session.delete(report)
         db.session.commit()
 
-    # 总表中的周报改为已发布
+    # The weekly report in the summary table is changed to published
     @staticmethod
     def report_edited(table_name):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()
-        all_report.is_publish = '已发布'
+        all_report.is_publish = 'published'
         db.session.commit()
 
-    # 更改总表中的信息
+    # Change the information in the summary table
     @staticmethod
     def change_report_status(table_name):
         all_report = AllReport.query.filter(AllReport.title == table_name).first()

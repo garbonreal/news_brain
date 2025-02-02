@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <link href="/static/img/favicon.png" rel="SHORTCUT ICON">
-    <title>个人中心</title>
+    <title>Personal center</title>
 
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
 
-    <!-- Bootstrap JQuery依赖 -->
+    <!-- Bootstrap JQuery -->
     <script src="/static/js/jquery-3.5.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/bootbox.min.js"></script>
 
-    <!-- MD5依赖 -->
+    <!-- MD5  -->
     <script src="/static/js/md5.js"></script>
 
     <link rel="stylesheet" href="/static/css/navigator.css"/>
@@ -51,7 +51,7 @@
 
             // initialize popover
             nickname.popover({
-                content: '昵称不能为空',
+                content: 'Nicknames cannot be empty',
                 placement: 'top',
                 trigger: 'manual',
             });
@@ -79,17 +79,17 @@
                     success: function (data) {
                         if (data === 'success') {
                             bootbox.alert({
-                                title: '信息提示',
-                                message: '昵称修改成功',
+                                title: 'Information tips',
+                                message: 'Nickname modified successfully',
                                 backdrop: true
                             });
                             setTimeout('location.reload();', 1000);
                         } else if (data === 'permission-denied') {
-                            bootbox.alert({title: '错误提示', message: '请先登录'});
+                            bootbox.alert({title: 'Error', message: 'Please log in first'});
                         } else if (data === 'invalid') {
-                            bootbox.alert({title: '错误提示', message: '参数错误'});
+                            bootbox.alert({title: 'Error', message: 'Parameter error'});
                         } else {
-                            bootbox.alert({title: '错误提示', message: '修改昵称失败'});
+                            bootbox.alert({title: 'Error', message: 'Failed to modify nickname'});
                         }
                     }
                 });
@@ -103,7 +103,7 @@
 
             // initialize popover
             oldPassword.popover({
-                content: '原密码不能为空',
+                content: 'Original Password cannot be empty',
                 placement: 'top',
                 trigger: 'manual',
             });
@@ -112,7 +112,7 @@
             });
 
             newPassword.popover({
-                content: '新密码不能为空',
+                content: 'New Password cannot be empty',
                 placement: 'top',
                 trigger: 'manual',
             });
@@ -121,7 +121,7 @@
             });
 
             verifyPassword.popover({
-                content: '两次输入的密码不相同',
+                content: 'Two passwords are different',
                 placement: 'top',
                 trigger: 'manual',
             });
@@ -170,14 +170,14 @@
                     success: function (data) {
                         changeBtn.removeAttr('disabled');
                         if (data === 'success') {
-                            bootbox.alert({title: '信息提示', message: '更改密码成功', backdrop: true});
+                            bootbox.alert({title: 'Information tips', message: 'Password changed successfully', backdrop: true});
                             setTimeout('location.reload();', 500);
                         } else if (data === 'wrong') {
-                            bootbox.alert({title: '错误提示', message: '原密码错误'});
+                            bootbox.alert({title: 'Error', message: 'Old password error'});
                         } else if (data === 'permission-denied') {
-                            bootbox.alert({title: '错误提示', message: '请先登录'});
+                            bootbox.alert({title: 'Error', message: 'Please log in first'});
                         } else if (data === 'invalid') {
-                            bootbox.alert({title: '错误提示', message: '参数错误'});
+                            bootbox.alert({title: 'Error', message: 'Parameter error'});
                         }
                     }
                 });
@@ -205,14 +205,14 @@
                     success: function (data) {
                         console.log(data);
                         if (data === 'success') {
-                            bootbox.alert({title: '消息提示', message: '更换头像成功', backdrop: true});
+                            bootbox.alert({title: 'Message alert', message: 'Succeeded in replacing the profile picture', backdrop: true});
                             setTimeout('location.reload();', 500);
                         } else if (data === 'permission-denied') {
-                            bootbox.alert({title: '错误提示', message: '请先登录'});
+                            bootbox.alert({title: 'Error', message: 'Please log in first'});
                         } else if (data === 'invalid') {
-                            bootbox.alert({title: '错误提示', message: '非法参数'});
+                            bootbox.alert({title: 'Error', message: 'Illegal parameter'});
                         } else {
-                            bootbox.alert({title: '错误提示', message: '上传头像失败'});
+                            bootbox.alert({title: 'Error', message: 'Failed to upload profile picture'});
                         }
                     }
                 });
@@ -231,9 +231,9 @@
 <div class="row">
     <div class="col-3">
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id="profileTab" data-toggle="pill" href="#profilePanel" role="tab">个人信息</a>
-            <a class="nav-link" id="passwordTab" data-toggle="pill" href="#passwordPanel" role="tab">修改密码</a>
-            <a class="nav-link" id="emailTab" data-toggle="pill" href="#emailPanel" role="tab">安全邮箱</a>
+            <a class="nav-link active" id="profileTab" data-toggle="pill" href="#profilePanel" role="tab">Personal information</a>
+            <a class="nav-link" id="passwordTab" data-toggle="pill" href="#passwordPanel" role="tab">Change password</a>
+            <a class="nav-link" id="emailTab" data-toggle="pill" href="#emailPanel" role="tab">Secure e-mail</a>
         </div>
     </div>
     <div class="col-9">
@@ -245,34 +245,34 @@
                             <div class="col-12">
                                 <img class="rounded-circle avatar" src="/static/img/{{user.avatar}}"/>
                             </div>
-                            <a class="col-12" id="changeAvatar" href="javascript: $('#avatar').click();">修改头像</a>
+                            <a class="col-12" id="changeAvatar" href="javascript: $('#avatar').click();">Modify profile image</a>
                         </div>
                         <div class="col-8">
                             <form>
                                 <div class="form-group row">
-                                    <label for="infoNickname" class="col-2 col-form-label">用户昵称</label>
+                                    <label for="infoNickname" class="col-2 col-form-label">Nickname</label>
                                     <div class="col-8">
                                         <input type="text" class="form-control" id="infoNickname"
                                                value="{{user.nickname}}">
                                     </div>
-                                    <button class="btn btn-primary col-2" id="saveNickname">保存</button>
+                                    <button class="btn btn-primary col-2" id="saveNickname">Save</button>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
+                                    <label class="col-sm-2 col-form-label">&nbsp;Username&nbsp;</label>
                                     <div class="col-sm-10">
                                         <input type="text" readonly class="form-control-plaintext"
                                                value="{{user.username}}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">注册时间</label>
+                                    <label class="col-sm-2 col-form-label">Registration date</label>
                                     <div class="col-sm-10">
                                         <input type="text" readonly class="form-control-plaintext"
                                                value="{{user.create_time}}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">周报数量</label>
+                                    <label class="col-sm-2 col-form-label">Number of weekly reports</label>
                                     <div class="col-sm-10">
                                         <input type="text" readonly class="form-control-plaintext"
                                                value="{{msg_count}}篇">
@@ -288,19 +288,19 @@
                     <div class="col-8" style="margin: auto;">
                         <form>
                             <div class="form-group">
-                                <label for="oldPassword">原密码</label>
-                                <input type="password" class="form-control" id="oldPassword" placeholder="请输入原密码">
+                                <label for="oldPassword">Original password</label>
+                                <input type="password" class="form-control" id="oldPassword" placeholder="Please input original password">
                             </div>
                             <div class="form-group">
-                                <label for="newPassword">新密码</label>
-                                <input type="password" class="form-control" id="newPassword" placeholder="请输入新密码">
+                                <label for="newPassword">new password</label>
+                                <input type="password" class="form-control" id="newPassword" placeholder="Please input new password">
                             </div>
                             <div class="form-group">
-                                <label for="verifyPassword">确认密码</label>
+                                <label for="verifyPassword">Confirm password</label>
                                 <input type="password" class="form-control" id="verifyPassword"
-                                       placeholder="再输入一遍新密码以确认">
+                                       placeholder="Enter the new password again to confirm">
                             </div>
-                            <button id="changeBtn" class="btn btn-primary col-12 change-btn">修改密码</button>
+                            <button id="changeBtn" class="btn btn-primary col-12 change-btn">change password</button>
                         </form>
                     </div>
                 </div>
@@ -310,25 +310,25 @@
                     <div class="col-8" style="margin: auto;">
                         <form>
                             <div class="form-group row">
-                                <label for="infoNickname" class="col-2 col-form-label">邮箱地址</label>
+                                <label for="infoNickname" class="col-2 col-form-label">E-mail address</label>
                                 <div class="col-8">
                                     <input type="text" class="form-control" id="emailAddress"
-                                           placeholder="请输入邮箱地址"
+                                           placeholder="Please enter your email address"
                                            {% if user.email %}value="{{user.email}}" disabled="true" {% endif %}>
                                 </div>
                                 <button class="btn btn-primary col-2" id="sendCode"
-                                        {% if user.email %}hidden{% endif %}>验证邮箱
+                                        {% if user.email %}hidden{% endif %}>Verification e-mail
                                 </button>
-                                <button class="btn btn-primary col-2" id="changeEmail">修改邮箱</button>
+                                <button class="btn btn-primary col-2" id="changeEmail">Modify e-mail</button>
                             </div>
                             <div class="form-group row">
-                                <label for="infoNickname" class="col-2 col-form-label">验证码</label>
+                                <label for="infoNickname" class="col-2 col-form-label">verification code</label>
                                 <div class="col-8">
                                     <input type="text" class="form-control" id="emailCode"
-                                           placeholder="请输入收到的验证码">
+                                           placeholder="Please enter the verification code you received">
                                 </div>
                             </div>
-                            <button id="emailBtn" class="btn btn-primary col-12 change-btn">绑定安全邮箱</button>
+                            <button id="emailBtn" class="btn btn-primary col-12 change-btn">Binding a secure email</button>
                         </form>
                     </div>
                 </div>

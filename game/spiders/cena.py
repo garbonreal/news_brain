@@ -111,7 +111,7 @@ class CenaSpider(scrapy.Spider):
             news_link = div.xpath(".//a/@href").extract_first()
             source = "电子信息产业网-{}".format(tag)
 
-            # 处理时间格式，网站一共可能出现4种时间格式：X 分前，今天 X:X，昨天 X:X，前天 X:X, XX-XX XX:XX
+            # 处理时间格式，网站一共可能出现4种时间格式: X 分前，今天 X:X，昨天 X:X，前天 X:X, XX-XX XX:XX
             if news_time is not None:
                 news_time = news_time.strip()
                 news_time = convert_time(news_time) + ":00"

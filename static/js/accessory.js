@@ -1,7 +1,7 @@
-// 实现一些常用特效
+// Implement some common effects
 
 $(function () {
-    // 侧边栏跟随
+    // Sidebar to follow
     const topPadding = 15;
     const sidebar = $("#sidebar");
     const offset = sidebar.offset();
@@ -27,7 +27,7 @@ $(function () {
         });
     }
 
-    // 用户中心下拉菜单
+    // User Center drop-down menu
     $('#loginCenter').hover(
         function () {
             $('.menu .userControl').css('display', 'block');
@@ -37,7 +37,7 @@ $(function () {
     );
 });
 
-// 回到页面顶部
+// Back to top of page
 function scrollToTop() {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
 }

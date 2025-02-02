@@ -7,7 +7,7 @@ $(function () {
     const loginBtn = $('#loginBtn');
     // 初始化登录框提示信息
     inputAccount.popover({
-        content: '用户名不能为空',
+        content: 'User name cannot be empty',
         placement: 'top',
         trigger: 'manual',
     });
@@ -17,7 +17,7 @@ $(function () {
     });
 
     inputPassword.popover({
-        content: '密码不能为空',
+        content: 'Password cannot be empty',
         placement: 'top',
         trigger: 'manual',
     });

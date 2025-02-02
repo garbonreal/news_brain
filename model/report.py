@@ -6,7 +6,7 @@ from common import type_map
 
 class Report:
 
-    # 获取编写的新闻概要内容
+    # Get the content of the written news summary
     @ staticmethod
     def get_news_content(table_name, news_id):
         curs = conn.cursor()
@@ -23,7 +23,7 @@ class Report:
             conn.rollback()
             curs.close()
 
-    # 编辑新闻概要
+    # edit the news summary
     @staticmethod
     def edit_news_summary(table_name, news_id, headline, content, news_type):
         curs = conn.cursor()
@@ -68,7 +68,7 @@ class Report:
                 print(e)
                 conn.rollback()
 
-    # 获取周报草稿中数据的条数
+    # Get the number of pieces of data in the draft weekly report
     @staticmethod
     def get_weekly_report_data_count(table_name):
         curs = conn.cursor()
@@ -85,7 +85,7 @@ class Report:
             conn.rollback()
             curs.close()
 
-    # 获取周报草稿中的所有数据
+    # Get all the data in the weekly report draft
     @staticmethod
     def get_weekly_report_data(table_name):
         curs = conn.cursor()
@@ -102,7 +102,7 @@ class Report:
             conn.rollback()
             curs.close()
 
-    # 获取周报草稿中的所有数据被选择的数据
+    # Get all the selected data in the weekly report draft
     @staticmethod
     def get_weekly_report_selected_data(table_name):
         curs = conn.cursor()
@@ -119,7 +119,7 @@ class Report:
             conn.rollback()
             curs.close()
 
-    # 向周报草稿加入初选数据
+    # Add first select data to the weekly draft
     @staticmethod
     def add_filter_news_to_weekly_report(table_name, title, time, news_id, source):
         curs = conn.cursor()
@@ -135,9 +135,9 @@ class Report:
             print(e)
             conn.rollback()
         curs.close()
-        return "新闻添加成功"
+        return "News added successfully"
 
-    # 从周报草稿删除初选数据
+    # Remove first select data from weekly draft reports
     @staticmethod
     def delete_filter_news_to_weekly_report(table_name, news_id):
         curs = conn.cursor()
@@ -151,13 +151,13 @@ class Report:
             print(e)
             conn.rollback()
         curs.close()
-        return "新闻添加成功"
+        return "News added successfully"
 
-    # 删除周报数据库表
+    # delete the weekly report database table
     @staticmethod
     def delete_weekly_report_table(table_name):
         curs = conn.cursor()
-        # 删除表
+        # delete table
         sql = '''DROP TABLE `%s`''' % table_name
         try:
             conn.ping(reconnect=True)
@@ -166,13 +166,13 @@ class Report:
         except Exception as e:
             print(e)
             conn.rollback()
-        print("删除"+table_name+"成功")
+        print("Delete "+table_name+" successfully!")
 
-    # 收集总表中各个tag对应的数量
+    # Collect the number of tags in the total table
     @staticmethod
     def get_tag_num(table_name):
         curs = conn.cursor()
-        # 删除表
+        # delete table
         sql = '''SELECT `tag`, COUNT(*) AS `tag_count` FROM `%s` GROUP BY `tag`''' % table_name
         try:
             conn.ping(reconnect=True)
@@ -186,13 +186,13 @@ class Report:
             conn.rollback()
             conn.close()
 
-    # 创建新的周报数据库表
+    # create a new weekly report database table
     @staticmethod
     def create_weekly_report_table(auth):
         curs = conn.cursor()
         curr_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         table_name = 'weekly_report_' + curr_time + "_" + auth
-        # 创建表
+        # create table
         sql = '''CREATE TABLE `%s` (
           `id` INT NOT NULL AUTO_INCREMENT,
           `title` VARCHAR(100) NOT NULL UNIQUE,

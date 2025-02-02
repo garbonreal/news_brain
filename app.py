@@ -13,23 +13,22 @@ from threading import Lock
 import concurrent.futures
 
 
-# __name__: 模块名
+# __name__: model name
 app = Flask(__name__)
-# 加载配置文件
+# load configuration
 app.config.from_object(config)
 
 progress = 0
 progress_lock = Lock()
 
 # with app.app_context():
-#     # 创建week_report表
 #     db.create_all()
 
 
-# 路由：路由就是用来定义网站中的一个个网页的
-# 路由的定义：使用app.route()装饰器来定义路由
-# 路由的访问：使用浏览器访问路由对应的网址
-# 路由的返回值：路由对应的视图函数的返回值会作为响应体返回给浏览器
+# routing: used to define individual web pages within a website
+# defining a route: use the app.route() decorator to define routes
+# accessing a route: visit the corresponding URL in a browser
+# route return value: the return value of the associated view function is sent as the response body to the browser
 @app.before_request
 def auto_login():
     """automated login using cookie"""
@@ -84,7 +83,7 @@ def start_scrapy():
 
         for future in concurrent.futures.as_completed(futures):
             progress += 3
-            print('进度：{}%'.format(progress))
+            print('Progress: {}%'.format(progress))
             sse.publish({'progress': progress}, type='progress')
 
     return Response(status=204)
@@ -92,20 +91,19 @@ def start_scrapy():
 
 @app.route('/update_data', methods=['POST', 'GET'])
 def update_data():
-    # 模拟一个长时间的处理过程
     for i in range(11):
         time.sleep(1)
         progress = (i + 1) * 10
-        print('进度：{}%'.format(progress))
+        print('Progress: {}%'.format(progress))
         sse.publish({'progress': progress}, type='progress')
     return Response(status=204)
 
 
-# 1. debug 模式：开启后，代码修改后，服务器会自动重启
+# 1. debug mode: when enabled, the server will automatically restart after code modifications
 
-# 2. host 参数：默认值是0.0.0.0，表示可以通过本机IP被外界访问
+# 2. host parameter: the default value is 0.0.0.0, allowing external access via the local machine's IP
 
-# 3. port 参数：默认值是5000，表示端口号
+# 3. port parameter: the default value is 5000, specifying the port number
 
 if __name__ == "__main__":
     app.app_context().push()

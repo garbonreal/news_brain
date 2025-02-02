@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <link href="/static/img/favicon.png" rel="SHORTCUT ICON">
-    <title>产经新闻大脑</title>
+    <title>Economic News Brain</title>
 
-    <!-- Bootstrap JQuery依赖 -->
+    <!-- Bootstrap JQuery -->
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
 
     <script src="/static/js/jquery-3.5.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- MD5依赖 -->
+    <!-- MD5 -->
     <script src="/static/js/md5.js"></script>
 
     <link rel="stylesheet" href="/static/css/navigator.css"/>
@@ -46,15 +46,15 @@
         document.body.removeChild(temp_form);
     }
 
-    function add_to_report(news_id, table_name)//防止使用标签在定义之前
+    function add_to_report(news_id, table_name)
     {
         var id = news_id + "_add_box";
     	var bton = document.getElementById(id).innerHTML;
-    	if(bton === "入选周报"){
-    		document.getElementById(id).innerHTML="取消加入";
+    	if(bton === "join weekly report"){
+    		document.getElementById(id).innerHTML="unjoin";
     	}
-    	if(bton === "取消加入"){
-    		document.getElementById(id).innerHTML="入选周报";
+    	if(bton === "unjoin"){
+    		document.getElementById(id).innerHTML="join weekly report";
     	}
     	var input = {
             "news_id": news_id,
@@ -98,8 +98,8 @@
             font-weight: bold;
             color: white;
             background-color: #1a75ff;
-            padding: 2px 6px; /* 可选项，添加一些内边距 */
-            border-radius: 4px; /* 可选项，添加圆角边框 */
+            padding: 2px 6px; 
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -111,37 +111,37 @@
         <ul class="row col-12 nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item custom-tab" role="presentation">
                 <a class="nav-link custom-tab-link" style="padding: 8px 50px;" href="/filter_weekly_report/{{ table_name }}">
-                    新闻初筛
+                    First Round Filtering
                 </a>
             </li>
             <li class="nav-item custom-tab" role="presentation">
                 <a class="nav-link custom-tab-link active" style="padding: 8px 50px;" href="/edit_weekly_report/{{ table_name }}">
-                    编辑周报
+                    Edit
                 </a>
             </li>
             <li class="nav-item custom-tab" role="presentation">
                 <a class="nav-link custom-tab-link" style="padding: 8px 50px;" href="/show_report/{{ table_name }}">
-                    周报预览
+                    Preview
                 </a>
             </li>
         </ul>
         <div class="row col-10" style="margin-bottom: 300px;">
             <div class="text-left" style="margin-top: 10px;">
                 <label style="font-weight: bolder;">{{ report_state.weekly_report_name }}</label>
-                <label>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;创建人：{{ report_state.principal }}&nbsp;&nbsp;|&nbsp;&nbsp;</label>
-                <label> 创建时间：{{ report_state.create_time }}</label>
+                <label>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;creator: {{ report_state.principal }}&nbsp;&nbsp;|&nbsp;&nbsp;</label>
+                <label> creation time: {{ report_state.create_time }}</label>
                 <a href="/editor_comment/{{ table_name }}" class="btn btn-primary btn-info text-center" style="margin-left: 50px;">
                     {% if report_state.content %}
-                        编辑评论
+                        edit comments
                     {% else %}
-                        添加评论
+                        add comments
                     {% endif %}
                 </a>
             </div>
             <div class="col-12 section">
                 <div class="d-flex col-12 justify-content-center">
                     <div class="btn btn-light p-3 section-title">
-                        <span>初筛新闻</span>
+                        <span>Preliminary News</span>
                         <span class="badge badge-primary" style="min-width: 78px;">{{ length }}</span>
                     </div>
                 </div>
@@ -152,31 +152,31 @@
                             <a class="headline" href='{{ news["url"] }}' target="_blank">{{ news["title"] }}</a>
                             <button class="btn btn-success mr-3"
                                     id= "{{ news['id'] }}_add_box"
-                                    onclick="add_to_report({{ news['id'] }}, '{{ table_name }}')">入选周报</button>
+                                    onclick="add_to_report({{ news['id'] }}, '{{ table_name }}')">join weekly report</button>
                             <button class="btn btn-outline-info mr-3"
-                                    onclick="sendData({{ news['id'] }}, '{{ table_name }}')">编辑新闻</button>
+                                    onclick="sendData({{ news['id'] }}, '{{ table_name }}')">edit news</button>
                         </div>
                         <div class="info">
-                            时间: {{ news["time"] }}&nbsp;&nbsp;&nbsp;
-                            来源: {{ news["source"] }}&nbsp;&nbsp;&nbsp;
+                            time: {{ news["time"] }}&nbsp;&nbsp;&nbsp;
+                            source: {{ news["source"] }}&nbsp;&nbsp;&nbsp;
                             {% if state[4] == 1 %}
                             <span class="highlight-enroll">
-                                已入选
+                                selected
                             </span>
                             &nbsp;&nbsp;&nbsp;
                             {% else %}
-                            未入选&nbsp;&nbsp;&nbsp;
+                            unselected&nbsp;&nbsp;&nbsp;
                             {% endif %}
                             {% if state[5] == 1 %}
                             <span class="highlight-edit">
-                                已编辑
+                                edited
                             </span>
                             &nbsp;&nbsp;&nbsp;
                             {% else %}
-                            未编辑&nbsp;&nbsp;&nbsp;
+                            not edited&nbsp;&nbsp;&nbsp;
                             {% endif %}
                             {% if state[9] == None %}
-                            未分类&nbsp;&nbsp;&nbsp;
+                            not classified&nbsp;&nbsp;&nbsp;
                             {% else %}
                             <span class="highlight-type">
                                 {{ state[9] }}
@@ -192,7 +192,7 @@
         <div class="col-2" style="padding-left: 15px; border: 0px solid black">
             <div class="col-12 list-group" id="sidebar" style="padding: 0; margin-top: 15px;">
                 <span href="#" class="list-group-item list-group-item-action active text-center">
-                    已入选统计
+                    sum of selected
                 </span>
                 {% for tag in tags %}
                     {% if tag[0] != None %}
@@ -210,7 +210,7 @@
                         <path fill-rule="evenodd"
                               d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM9.5 5h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V6.707l4.146 4.147a.5.5 0 0 0 .708-.708L6.707 6H9.5a.5.5 0 0 0 0-1z"/>
                     </svg>
-                    回到顶部
+                    back to the top
                 </a>
             </div>
         </div>

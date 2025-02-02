@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <link href="/static/img/favicon.png" rel="SHORTCUT ICON">
-    <title>产经新闻大脑</title>
+    <title>Economic News Brain</title>
 
-    <!-- Bootstrap JQuery依赖 -->
+    <!-- Bootstrap JQuery -->
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
 
     <script src="/static/js/jquery-3.5.1.min.js"></script>
@@ -16,7 +16,7 @@
     <script src="/static/js/userAuth.js"></script>
     <script src="/static/js/accessory.js"></script>
 
-    <!-- UEditor 依赖 -->
+    <!-- UEditor   -->
     <script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
     <script type="text/javascript" charset="utf-8" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
@@ -27,71 +27,71 @@
                 autoHeightEnabled: false,
                 pasteplain: true,
                 toolbars: [
-                    [
-                        'source', //源代码
-                        'undo', //撤销
-                        'redo', //重做
-                        'bold', //加粗
-                        'italic', //斜体
-                        'underline', //下划线
-                        'strikethrough', //删除线
-                        'subscript', //下标
-                        'superscript', //上标
-                        'fontborder', //字符边框
-                        'formatmatch', //格式刷
-                        'blockquote', //引用
-                        'pasteplain', //纯文本粘贴模式
-                        'selectall', //全选
-                        'preview', //预览
-                        'horizontal', //分隔线
-                        'removeformat', //清除格式
-                        'unlink', //取消链接
-                        'inserttable', //插入表格
-                        'edittable', //表格属性
-                        'edittd', //单元格属性
-                        'insertrow', //前插入行
-                        'insertcol', //前插入列
-                        'mergeright', //右合并单元格
-                        'mergedown', //下合并单元格
-                        'deleterow', //删除行
-                        'deletecol', //删除列
-                        'splittorows', //拆分成行
-                        'splittocols', //拆分成列
-                        'splittocells', //完全拆分单元格
-                        'deletecaption', //删除表格标题
-                        'inserttitle', //插入标题
-                        'mergecells', //合并多个单元格
-                        'deletetable', //删除表格
-                        'insertparagraphbeforetable', //"表格前插入行"
-                        'simpleupload', //单图上传
-                        'insertimage' //多图上传
-                    ], [
-                        'insertcode', //代码语言
-                        'fontfamily', //字体
-                        'fontsize', //字号
-                        'paragraph', //段落格式
-                        'forecolor', //字体颜色
-                        'link', //超链接
-                        'emotion', //表情
-                        'spechars', //特殊字符
-                        'indent', //首行缩进
-                        'justifyleft', //居左对齐
-                        'justifyright', //居右对齐
-                        'justifycenter', //居中对齐
-                        'justifyjustify', //两端对齐
-                        'backcolor', //背景色
-                        'insertorderedlist', //有序列表
-                        'insertunorderedlist', //无序列表
-                        'fullscreen', //全屏
-                        'imagenone', //默认
-                        'imageleft', //左浮动
-                        'imageright', //右浮动
-                        'imagecenter', //居中
-                        'wordimage', //图片转存
-                        'lineheight', //行间距
-                        'background' //背景
-                    ]
-                ]
+                            [
+                                'source', // Source code
+                                'undo', // Undo
+                                'redo', // Redo
+                                'bold', // Bold
+                                'italic', // Italic
+                                'underline', // Underline
+                                'strikethrough', // Strikethrough
+                                'subscript', // Subscript
+                                'superscript', // Superscript
+                                'fontborder', // Font border
+                                'formatmatch', // Format brush
+                                'blockquote', // Blockquote
+                                'pasteplain', // Paste as plain text mode
+                                'selectall', // Select all
+                                'preview', // Preview
+                                'horizontal', // Horizontal line
+                                'removeformat', // Remove formatting
+                                'unlink', // Remove hyperlink
+                                'inserttable', // Insert table
+                                'edittable', // Edit table properties
+                                'edittd', // Edit cell properties
+                                'insertrow', // Insert row before
+                                'insertcol', // Insert column before
+                                'mergeright', // Merge right cell
+                                'mergedown', // Merge down cell
+                                'deleterow', // Delete row
+                                'deletecol', // Delete column
+                                'splittorows', // Split into rows
+                                'splittocols', // Split into columns
+                                'splittocells', // Fully split cells
+                                'deletecaption', // Delete table caption
+                                'inserttitle', // Insert title
+                                'mergecells', // Merge multiple cells
+                                'deletetable', // Delete table
+                                'insertparagraphbeforetable', // Insert paragraph before table
+                                'simpleupload', // Single image upload
+                                'insertimage' // Multiple image upload
+                            ], [
+                                'insertcode', // Code language
+                                'fontfamily', // Font family
+                                'fontsize', // Font size
+                                'paragraph', // Paragraph format
+                                'forecolor', // Font color
+                                'link', // Hyperlink
+                                'emotion', // Emoji
+                                'spechars', // Special characters
+                                'indent', // First-line indent
+                                'justifyleft', // Align left
+                                'justifyright', // Align right
+                                'justifycenter', // Align center
+                                'justifyjustify', // Justify both sides
+                                'backcolor', // Background color
+                                'insertorderedlist', // Ordered list
+                                'insertunorderedlist', // Unordered list
+                                'fullscreen', // Fullscreen mode
+                                'imagenone', // Default image alignment
+                                'imageleft', // Float image left
+                                'imageright', // Float image right
+                                'imagecenter', // Center image
+                                'wordimage', // Convert images from Word
+                                'lineheight', // Line height
+                                'background' // Background settings
+                            ]
+                        ]
             })
             ue.ready(function () {
                 // initialize content
@@ -107,11 +107,11 @@
             // util function for verification
             function verifyMessage() {
                 if (headline.val().length < 4) {
-                    bootbox.alert({title: '错误提示', message: '标题不能少于4个字'});
+                    bootbox.alert({title: 'Error', message: 'The title cannot be less than 4 words'});
                     return false;
                 }
                 if (ue.getContentTxt().length < 10) {
-                    bootbox.alert({title: '错误提示', message: '内容不能少于10个字'});
+                    bootbox.alert({title: 'Error', message: 'The content should not be less than 10 words'});
                     return false;
                 }
                 return true;
@@ -135,19 +135,19 @@
                     },
                     success: function (data) {
                         if (data === 'permission_denied') {
-                            bootbox.alert({title: '错误提示', message: '请先登录'});
+                            bootbox.alert({title: 'Error', message: 'Please log in first'});
                             setTimeout('location.href = "/login?from=" + location.href;', 500);
                         } else if (data === 'failed') {
-                            bootbox.alert({title: '错误提示', message: (drafted ? '保存' : '发布') + '失败'});
+                            bootbox.alert({title: 'Error', message: (drafted ? 'save' : 'issue') + 'fail'});
                         } else{
                             // server will return message id if succeeded
                             if (drafted) {
-                                bootbox.alert({title: '信息提示', message: '保存成功</br>将为您跳转...', backdrop: true});
+                                bootbox.alert({title: 'Information tips', message: 'Save successfully </br> will jump for you...', backdrop: true});
                                 setTimeout(function () {
                                     location.href = '/message/detail/' + data;
                                 }, 500);
                             } else {
-                                bootbox.alert({title: '信息提示', message: '发布成功</br>将为您跳转...', backdrop: true});
+                                bootbox.alert({title: 'Information tips', message: 'Publication success </br> will redirect you to...', backdrop: true});
                                 setTimeout(function () {
                                     location.href = '/edit_weekly_report/' + table_name;
                                 }, 500);
@@ -155,7 +155,7 @@
                         }
                     },
                     error: function (data) {
-                        alert("出错啦...");
+                        alert("There's a mistake...");
                     }
                 });
             }
@@ -199,11 +199,11 @@
         <div class="col-12 input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">
-                    <a href="{{ news_link }}" target="_blank" style="color: #000000;">访问网址</a>
+                    <a href="{{ news_link }}" target="_blank" style="color: #000000;">visit website</a>
                 </span>
             </div>
             <div class="input-group-prepend">
-                <span class="input-group-text">新闻标题</span>
+                <span class="input-group-text">News Title</span>
             </div>
             <input type="text" class="form-control" id="headline"
                    {% if news_headline %}
@@ -221,7 +221,7 @@
                     <select class="col custom-select" id="messageType">
                         <option value="-1" >
                             {% if news_tag == None %}
-                                未选标签
+                                no tag
                             {% else %}
                                 {{news_tag}}
                             {% endif %}
@@ -233,7 +233,7 @@
                         {% endfor %}
                     </select>
                     <div class="col my-1" style="text-align: right">
-                        <button id="postMessage" class="btn btn-primary">发布摘要</button>
+                        <button id="postMessage" class="btn btn-primary">Release abstract</button>
                     </div>
                 </div>
             </form>
