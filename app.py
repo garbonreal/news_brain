@@ -100,19 +100,18 @@ def update_data():
 
 
 # 1. debug mode: when enabled, the server will automatically restart after code modifications
-
 # 2. host parameter: the default value is 0.0.0.0, allowing external access via the local machine's IP
-
 # 3. port parameter: the default value is 5000, specifying the port number
 
-if __name__ == "__main__":
-    app.app_context().push()
+with app.app_context():
     init_db(app)
 
-    app.register_blueprint(auth)
-    app.register_blueprint(all_report)
-    app.register_blueprint(website_url)
-    app.register_blueprint(report)
-    app.register_blueprint(profile)
-    app.register_blueprint(sse, url_prefix='/stream')
+app.register_blueprint(auth)
+app.register_blueprint(all_report)
+app.register_blueprint(website_url)
+app.register_blueprint(report)
+app.register_blueprint(profile)
+app.register_blueprint(sse, url_prefix='/stream')
+
+if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

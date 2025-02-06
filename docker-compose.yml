@@ -1,0 +1,49 @@
+services:
+  flask:
+    build: . # Build the image from the Dockerfile in the current directory
+    container_name: flask_app
+    expose:
+      - "5000"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      MYSQL_HOST: mysql # prior than .env
+      MYSQL_ROOT_PASSWORD: 110110
+      REDIS_URL: redis://redis:6379/0
+    restart: always
+    volumes:
+      - .:/app
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    expose:
+      - "3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 110110
+    volumes: 
+      - web_mysql_data:/var/lib/mysql
+      - D:/Personal_Experience/news_brain/mysql_init/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+
+  redis:
+    image: redis:latest
+    container_name: redis_server
+    restart: always
+    expose:
+      - "6379"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - flask
+    restart: always
+
+volumes:
+  web_mysql_data:

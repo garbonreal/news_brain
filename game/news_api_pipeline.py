@@ -11,7 +11,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s") 
 
 # prepare configuration
-load_dotenv()
+load_dotenv(override=False)
 
 api_key = os.getenv("NEWS_API_KEY")
 

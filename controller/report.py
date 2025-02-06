@@ -2,9 +2,9 @@ from flask import Blueprint, request, session, redirect, make_response, render_t
 from model import AllReport, Report, WebsiteUrl
 from common import type_map
 from common import get_summary
-from docxtpl import DocxTemplate
+# from docxtpl import DocxTemplate
 from datetime import datetime
-import pypandoc
+# import pypandoc
 
 # the route of the news editing page
 report = Blueprint('report', __name__, template_folder='templates')
@@ -181,11 +181,11 @@ def export_report(table_name):
     with open("./data/" + table_name + ".html", "w", encoding="utf-8") as file:
         file.write(html)
 
-    pypandoc.convert_file("./data/" + table_name + ".html", 'docx',
-                          encoding='gbk',
-                          outputfile="./data/" + table_name + ".docx")
+    # pypandoc.convert_file("./data/" + table_name + ".html", 'docx',
+    #                       encoding='gbk',
+    #                       outputfile="./data/" + table_name + ".docx")
 
-    return send_from_directory("./data/", table_name + ".docx")
+    return send_from_directory("./data/", table_name + ".html")
 
 
 # # export the weekly report

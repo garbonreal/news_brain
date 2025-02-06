@@ -1,17 +1,20 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv(override=False)
 
 SECRET_KEY = os.urandom(24)
 
-# 配置mysql数据库
-HOSTNAME = '127.0.0.1'
-PORT = '3306'
-DATABASE = 'idea_bank'
-USERNAME = 'root'
-PASSWORD = '110110'
+# configuring the mysql Database
+HOSTNAME = os.getenv("MYSQL_HOST")
+PORT = os.getenv("MYSQL_PORT")
+DATABASE = os.getenv("MYSQL_DATABASE")
+USERNAME = os.getenv("MYSQL_USER")
+PASSWORD = os.getenv("MYSQL_PASSWORD")
 
-# 配置数据库的连接地址
+# configure the database connection address
 DB_URI = 'mysql+pymysql://' + USERNAME + ':' + PASSWORD + '@' + HOSTNAME \
                                         + ':' + PORT + '/' + DATABASE + "?charset=utf8mb4"
 SQLALCHEMY_DATABASE_URI = DB_URI
 SQLALCHEMY_TRACK_MODIFICATIONS = True
-REDIS_URL = 'redis://localhost:6379/0'
+REDIS_URL = os.getenv("REDIS_URL")
