@@ -7,15 +7,20 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install any needed packages specified in requirements.txt
+# Install required packages
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Install Airflow & Supervisor
+RUN pip install apache-airflow apache-airflow-providers-mysql supervisor
 
-# Define environment variable
-ENV NAME World
+# Initialize Airflow DB
+RUN airflow db init
 
-# Run app.py when the container launches (use gunicorn as the server)
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
-# CMD ["python", "app.py"]
+# Expose required ports
+EXPOSE 5000 8080
+
+# Copy Supervisor configuration file
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Start Supervisor
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -9,7 +9,7 @@ def init_sentiment_analysis():
     # FinBERT Sentiment Analysis
     # https://github.com/yya518/FinBERT
     # Load the BART model and tokenizer
-    cache_dir = "ml_model/finbert-tone"
+    cache_dir = "data_processing/ml_model/finbert-tone"
     model = AutoModelForSequenceClassification.from_pretrained("yiyanghkust/finbert-tone", cache_dir=cache_dir)
     tokenizer = AutoTokenizer.from_pretrained("yiyanghkust/finbert-tone", cache_dir=cache_dir)
     

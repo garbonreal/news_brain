@@ -9,7 +9,7 @@ def init_summarization_model():
     nltk.download("punkt_tab")
     
     # Load the BART model and tokenizer
-    cache_dir = "ml_model/bart-large-cnn"
+    cache_dir = "data_processing/ml_model/bart-large-cnn"
     model = AutoModelForSeq2SeqLM.from_pretrained("facebook/bart-large-cnn", cache_dir=cache_dir)
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn", cache_dir=cache_dir)
     
@@ -58,7 +58,6 @@ def get_news_summary(text, model, tokenizer, method="chunk"):
 
         for i in range(0, len(words), chunk_size - overlap):
             chunk = " ".join(words[i:i + chunk_size])
-            print(len(chunk))
             summary = summarizer(chunk, max_length=150, min_length=50, do_sample=False)
             summaries.append(summary[0]["summary_text"])
 

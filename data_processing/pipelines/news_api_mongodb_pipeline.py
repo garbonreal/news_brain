@@ -1,41 +1,14 @@
-import os
-from dotenv import load_dotenv
 from newsapi.newsapi_client import NewsApiClient
 import pandas as pd
-from datetime import date, timedelta
-from pymongo import MongoClient
+from datetime import date, datetime, timedelta
 import logging
+from utils.db_s3_utils import get_mongo_client, get_news_api_key
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Load environment variables
-load_dotenv(override=False)
-
-# Fetch News API Key
-api_key = os.getenv("NEWS_API_KEY")
-
-# MongoDB Configuration
-MONGO_HOST = os.getenv('MONGO_HOST')  # Default to localhost
-MONGO_PORT = int(os.getenv('MONGO_PORT'))  # Default MongoDB port
-MONGO_USER = os.getenv('MONGO_USER')
-MONGO_PASSWORD = os.getenv('MONGO_PASSWORD')
-MONGO_DB = os.getenv('MONGO_DATABASE')
-
-MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
-print(MONGO_URI)
-
-try:
-    # Connect to MongoDB
-    client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)  # Timeout in 5 seconds
-    print(client.server_info())
-    db = client["news_db"]
-    collection = db["news_articles"]  # Target collection
-    logging.info("Successfully connected to MongoDB.")
-except Exception as e:
-    logging.error("MongoDB connection failed due to: %s", e)
-
-def fetch_news_data(
+def fetch_top_news_data(
     api_key,
     country="us",
     category="business",
@@ -93,6 +66,13 @@ def load_news_data(df):
     num = 0
     news_list = df.to_dict(orient="records")  # Convert DataFrame to list of dictionaries
 
+    client = get_mongo_client()
+    if client is None:
+        return
+    
+    db = client["news_db"]
+    collection = db["news_articles"]  # Target collection
+
     try:
         # Insert or update data (using URL as a unique identifier)
         for news in news_list:
@@ -105,13 +85,50 @@ def load_news_data(df):
         logging.info(f"Successfully stored {num} news articles in MongoDB.")
     except Exception as e:
         logging.error("Failed to load news data: %s", e)
+    
+    client.close()
 
 
 # Execution Flow
-total_results, articles = fetch_news_data(api_key)
-if total_results == 0:
-    logging.error("No news data fetched.")
-else:
+def process_news_data(start_date, end_date):
+    """
+    Fetch, filter, transform, and load news data within the given date range.
+    :param start_date: Start date (inclusive) in 'YYYY-MM-DD' format
+    :param end_date: End date (inclusive) in 'YYYY-MM-DD' format
+    """
+
+    total_results, articles = fetch_top_news_data(get_news_api_key())
+    
+    if total_results == 0:
+        logging.error("No news data fetched.")
+        return
+    
     logging.info(f"Successfully fetched {total_results} news articles.")
-    df = transform_news_data(articles)
+    
+    # Convert start_date and end_date to datetime objects
+    start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+    end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+
+    # Filter articles based on publishedAt date range
+    filtered_articles = []
+    for article in articles:
+        published_at = article.get("publishedAt")
+        if published_at:
+            try:
+                pub_date = datetime.strptime(published_at[:10], "%Y-%m-%d")  # Extract only YYYY-MM-DD
+                if start_dt <= pub_date < end_dt:
+                    filtered_articles.append(article)
+            except ValueError:
+                logging.warning(f"Invalid date format in article: {published_at}")
+    
+    if not filtered_articles:
+        logging.warning("No articles found within the specified date range.")
+        return
+    
+    df = transform_news_data(filtered_articles)
     load_news_data(df)
+    logging.info(f"Successfully processed {len(filtered_articles)} filtered news articles.")
+
+
+if __name__ == "__main__":
+    process_news_data("2025-02-11", "2025-02-12")
