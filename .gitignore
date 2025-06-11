@@ -5,3 +5,4 @@ __pycache__/
 data_processing/ml_model/
 ml_model/
 static/bootstrap
+test_News_api.ipynb
