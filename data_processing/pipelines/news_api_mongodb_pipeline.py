@@ -2,7 +2,7 @@ from newsapi.newsapi_client import NewsApiClient
 import pandas as pd
 from datetime import date, datetime, timedelta
 import logging
-from utils.db_s3_utils import get_mongo_client, get_news_api_key
+from data_processing.utils.db_s3_utils import get_mongo_client, get_news_api_key
 
 
 # Configure logging

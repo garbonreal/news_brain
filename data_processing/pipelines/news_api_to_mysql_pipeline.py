@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 from newsapi.newsapi_client import NewsApiClient
 import pandas as pd
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import pymysql
 import logging
+from data_processing.utils.db_s3_utils import get_news_api_key
 
 
 # configuration log
@@ -111,6 +112,46 @@ def load_news_data(df):
 		logging.info("Successfully loaded news number: %s", num)
 		cursor.close()
 		connection.close()
+
+
+def process_news_mysql(start_date, end_date):
+    """
+    Fetch, filter, transform, and load news data within the given date range.
+    :param start_date: Start date (inclusive) in 'YYYY-MM-DD' format
+    :param end_date: End date (inclusive) in 'YYYY-MM-DD' format
+    """
+
+    total_results, articles = fetch_news_data(get_news_api_key())
+    
+    if total_results == 0:
+        logging.error("No news data fetched.")
+        return
+    
+    logging.info(f"Successfully fetched {total_results} news articles.")
+    
+    # Convert start_date and end_date to datetime objects
+    start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+    end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+
+    # Filter articles based on publishedAt date range
+    filtered_articles = []
+    for article in articles:
+        published_at = article.get("publishedAt")
+        if published_at:
+            try:
+                pub_date = datetime.strptime(published_at[:10], "%Y-%m-%d")  # Extract only YYYY-MM-DD
+                if start_dt <= pub_date < end_dt:
+                    filtered_articles.append(article)
+            except ValueError:
+                logging.warning(f"Invalid date format in article: {published_at}")
+    
+    if not filtered_articles:
+        logging.warning("No articles found within the specified date range.")
+        return
+    
+    df = transform_news_data(filtered_articles)
+    load_news_data(df)
+    logging.info(f"Successfully processed {len(filtered_articles)} filtered news articles.")
 
 
 total_results, articles = fetch_news_data(api_key)

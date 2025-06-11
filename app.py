@@ -11,6 +11,8 @@ import time
 from flask_sse import sse
 from threading import Lock
 import concurrent.futures
+import datetime
+from data_processing import process_news_data, process_and_store_articles, analyze_news_data, process_news_mysql
 
 
 # __name__: model name
@@ -64,27 +66,23 @@ def run_spider(spider_name):
 
 @app.route('/start_scrapy', methods=['POST', 'GET'])
 def start_scrapy():
-    global progress
-    progress = 10
-    spider_names = ['c114', 'cace', 'ccia', 'ccidcom',
-                    'cena', 'ciia', 'cinic', 'cnii',
-                    'cto51', 'cww', 'echinagov', 'gkzhan',
-                    'isc', 'sicgov', 'beijinggov',
-                    'bjfgw', 'cqdsjj', 'cqjjxxw', 'cqkjj',
-                    'cskjj', 'gzkjj', 'hzkjj', 'njkjj',
-                    'shgov', 'suzhougxj', 'suzhoukjj', 'szgxj',
-                    'szstic', 'whjxj', 'chinagazelle']
+    today = datetime.datetime.utcnow().date()
+    start_date = str(today - datetime.timedelta(days=2))
+    end_date = str(today - datetime.timedelta(days=1))
 
-    futures = []
-    with ThreadPoolExecutor() as executor:
-        for spider_name in spider_names:
-            future = executor.submit(run_spider, spider_name)
-            futures.append(future)
+    print(f"[INFO] Running news pipeline from {start_date} to {end_date}")
+    process_news_mysql(start_date=start_date, end_date=end_date)
 
-        for future in concurrent.futures.as_completed(futures):
-            progress += 3
-            print('Progress: {}%'.format(progress))
-            sse.publish({'progress': progress}, type='progress')
+    # print("[1/3] Fetching news from API...")
+    # process_news_data(start_date=start_date, end_date=end_date)
+
+    # print("[2/3] Scraping news and storing to S3...")
+    # process_and_store_articles(start_date=start_date, end_date=end_date)
+
+    # print("[3/3] Analyzing news and storing results to MongoDB...")
+    # analyze_news_data(start_date=start_date, end_date=end_date)
+
+    # print("[DONE] News pipeline finished successfully.")
 
     return Response(status=204)
 

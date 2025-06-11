@@ -1,8 +1,8 @@
 from datetime import datetime
-from utils.sentiment_analysis import get_sentiment, init_sentiment_analysis
-from utils.news_summary import get_news_summary, init_summarization_model
+from data_processing.utils.sentiment_analysis import get_sentiment, init_sentiment_analysis
+from data_processing.utils.news_summary import get_news_summary, init_summarization_model
 import logging
-from utils.db_s3_utils import get_mongo_client, get_s3_client, get_bucket_name
+from data_processing.utils.db_s3_utils import get_mongo_client, get_s3_client, get_bucket_name
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -18,7 +18,7 @@ def read_text_from_s3(s3_url, s3_client, bucket_name):
     return obj["Body"].read().decode("utf-8")
 
 
-def process_news_data(start_date, end_date):
+def analyze_news_data(start_date, end_date):
     start_dt = datetime.strptime(start_date, "%Y-%m-%d")
     end_dt = datetime.strptime(end_date, "%Y-%m-%d")
 
@@ -81,4 +81,4 @@ def process_news_data(start_date, end_date):
 if __name__ == "__main__":
     start_date = "2025-02-11"
     end_date = "2025-02-12"
-    process_news_data(start_date, end_date)
+    analyze_news_data(start_date, end_date)

@@ -29,7 +29,8 @@ def get_mongo_client():
             logging.error("MongoDB environment variables are missing.")
             return None
 
-        mongo_uri = f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:{mongo_port}/{mongo_db}?authSource=admin"
+        # mongo_uri = f"mongodb://{mongo_user}:{mongo_password}@{mongo_host}:{mongo_port}/{mongo_db}?authSource=admin"
+        mongo_uri = "mongodb://localhost:27017/news_db"  # For local testing, replace with actual credentials in production
 
         client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
         

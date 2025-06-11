@@ -38,8 +38,6 @@ services:
     image: mongo
     container_name: mongo_server
     restart: always
-    ports:
-      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: 123456
@@ -49,8 +47,6 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql_server
-    ports:
-      - "3307:3306"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 110110

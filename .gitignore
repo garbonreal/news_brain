@@ -4,3 +4,4 @@ __pycache__/
 **/__pycache__/
 data_processing/ml_model/
 ml_model/
+static/bootstrap

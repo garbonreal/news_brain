@@ -1,7 +1,7 @@
 import newspaper
 import logging
 from datetime import datetime
-from utils.db_s3_utils import get_mongo_client, get_s3_client, get_bucket_name
+from data_processing.utils.db_s3_utils import get_mongo_client, get_s3_client, get_bucket_name
 
 
 logging.basicConfig(level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
